@@ -24,7 +24,10 @@ class Ticker {
 
         this.#wrapper().addClass('flex-column flex-justify-center pos-relative');
         this.#wrapper().append('<p class="ticker m-0 pos-absolute">' + this.#text + '</p>');
-		this.#wrapper().append(`
+        this.#wrapper().append(`
+            <div class="ticker-controls flex-row flex-justify-center pos-absolute t-2 l-50" style="transform: translateX(-50%);">
+				<input type="text" class="form-control ticker-text" id="exampleInputEmail1">
+            </div>
 			<div class="ticker-controls flex-row flex-justify-center pos-absolute b-2 l-50" style="transform: translateX(-50%);">
                 <button type="button" class="ticker-toggle btn btn-dark mr-10">&#x23EF;</button>
 				<button type="button" class="ticker-decrease-speed btn btn-dark mr-10">-</button>
@@ -33,14 +36,27 @@ class Ticker {
                 <button type="button" class="ticker-stop btn btn-dark ml-10">&#x23F9</button>
             </div>
 		`);
-		
-		$(window).on('load', () => {
-			$(this.#selector + ' .ticker-decrease-speed').on('click', () => { if (this.#tickSpeed > 1) { this.#tickSpeed--; this.update(); } })
-			$(this.#selector + ' .ticker-increase-speed').on('click', () => { if (this.#tickSpeed < 20) { this.#tickSpeed++; this.update(); } })
-			$(this.#selector + ' .ticker-toggle').on('click', () => this.toggle());
-			$(this.#selector + ' .ticker-stop').on('click', () => this.stop());
-		});
-		
+
+		$(this.#selector + ' .ticker-text').val(this.#text);
+
+        $(window).on('load', () => {
+            $(this.#selector + ' .ticker-decrease-speed').on('click', () => {
+                if (this.#tickSpeed > 1) {
+                    this.#tickSpeed--;
+                    this.update();
+                }
+            })
+            $(this.#selector + ' .ticker-increase-speed').on('click', () => {
+                if (this.#tickSpeed < 20) {
+                    this.#tickSpeed++;
+                    this.update();
+                }
+            })
+            $(this.#selector + ' .ticker-toggle').on('click', () => this.toggle());
+            $(this.#selector + ' .ticker-stop').on('click', () => this.stop());
+			$(this.#selector + ' .ticker-text').on('input', () => this.Text = $(this.#selector + ' .ticker-text').val())
+        });
+
         this.#wrapper().css('overflow', 'hidden');
         this.#wrapper().css('min-height', this.#element().height() * 2);
 
@@ -53,6 +69,11 @@ class Ticker {
 
     get #MaxPosition() { return Math.round(this.#element().width() / this.#wrapper().width() * 100); }
 
+    get Text() { return this.#text }
+    set Text(t) {
+        this.#text = t;
+        this.#element().html(this.#text);
+    }
     get TickSpeed() { return this.#tickSpeed }
     set TickSpeed(ts) { this.#tickSpeed = ts }
     get TickTime() { return this.#tickSpeed }
@@ -64,8 +85,13 @@ class Ticker {
     }
     get Position() { return this.#position }
     set Position(pos) {
-		if (this.#position < -this.#MaxPosition || pos >= 100) { this.#element().removeClass('tr-linear-1'); this.#position = 100; }
-        else { this.#element().addClass('tr-linear-1'); this.#position = pos; }
+        if (this.#position < -this.#MaxPosition || pos >= 100) {
+            this.#element().removeClass('tr-linear-1');
+            this.#position = 100;
+        } else {
+            this.#element().addClass('tr-linear-1');
+            this.#position = pos;
+        }
         this.update();
     }
     get Selector() { return this.#selector }
@@ -74,7 +100,7 @@ class Ticker {
         this.#element().css('color', this.#textColor);
         this.#element().css('font-size', this.#fontSize);
         this.#element().css('left', this.#position + "%");
-		$(this.#selector + ' .ticker-speed').html(this.#tickSpeed);
+        $(this.#selector + ' .ticker-speed').html(this.#tickSpeed);
     }
 
     start() {
@@ -86,11 +112,11 @@ class Ticker {
     pause() {
         this.interval = clearInterval(this.interval);
     }
-	
-	toggle() {
-		if (this.interval !== undefined) this.pause();
-		else this.start();
-	}
+
+    toggle() {
+        if (this.interval !== undefined) this.pause();
+        else this.start();
+    }
 
     stop() {
         this.interval = clearInterval(this.interval);
