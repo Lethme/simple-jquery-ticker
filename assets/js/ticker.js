@@ -25,10 +25,11 @@ class Ticker {
         this.#wrapper().addClass('flex-column flex-justify-center pos-relative');
         this.#wrapper().append('<p class="ticker m-0 pos-absolute">' + this.#text + '</p>');
         this.#wrapper().append(`
-            <div class="ticker-controls flex-row flex-justify-center pos-absolute t-2 l-50" style="transform: translateX(-50%);">
-				<input type="text" class="form-control ticker-text" id="exampleInputEmail1">
+            <div class="ticker-controls flex-row flex-justify-center flex-align-center pos-absolute t-2 l-50" style="transform: translateX(-50%);">
+				<input type="text" class="form-control ticker-text">
+				<input type="color" class="form-control ticker-text-color w-em-30 ml-10" title="Choose ticker color">
             </div>
-			<div class="ticker-controls flex-row flex-justify-center pos-absolute b-2 l-50" style="transform: translateX(-50%);">
+			<div class="ticker-controls flex-row flex-justify-center flex-align-center pos-absolute b-2 l-50" style="transform: translateX(-50%);">
                 <button type="button" class="ticker-toggle btn btn-dark mr-10">&#x23EF;</button>
 				<button type="button" class="ticker-decrease-speed btn btn-dark mr-10">-</button>
                 <h2 class="ticker-speed">` + this.#tickSpeed + `</h2>
@@ -38,6 +39,7 @@ class Ticker {
 		`);
 
 		$(this.#selector + ' .ticker-text').val(this.#text);
+		$(this.#selector + ' .ticker-text-color').val(this.#textColor);
 
         $(window).on('load', () => {
             $(this.#selector + ' .ticker-decrease-speed').on('click', () => {
@@ -55,6 +57,7 @@ class Ticker {
             $(this.#selector + ' .ticker-toggle').on('click', () => this.toggle());
             $(this.#selector + ' .ticker-stop').on('click', () => this.stop());
 			$(this.#selector + ' .ticker-text').on('input', () => this.Text = $(this.#selector + ' .ticker-text').val())
+			$(this.#selector + ' .ticker-text-color').on('input', () => this.TextColor = $(this.#selector + ' .ticker-text-color').val())
         });
 
         this.#wrapper().css('overflow', 'hidden');
