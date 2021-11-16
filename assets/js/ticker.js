@@ -61,7 +61,7 @@ class Ticker {
         });
 
         this.#wrapper().css('overflow', 'hidden');
-        this.#wrapper().css('min-height', this.#element().height() * 2);
+        this.#wrapper().css('min-height', this.#element().height() * 4);
 
         this.#element().addClass('white-space-nowrap tr-linear-1');
         this.#element().css('color', this.#textColor);
