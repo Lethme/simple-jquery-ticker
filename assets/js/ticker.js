@@ -49,7 +49,7 @@ class Ticker {
                 }
             })
             $(this.#selector + ' .ticker-increase-speed').on('click', () => {
-                if (this.#tickSpeed < 20) {
+                if (this.#tickSpeed < 100) {
                     this.#tickSpeed++;
                     this.update();
                 }
